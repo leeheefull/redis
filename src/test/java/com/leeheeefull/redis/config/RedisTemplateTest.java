@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -64,6 +66,23 @@ public class RedisTemplateTest {
 
         var size = hashOperations.size(key);
         assertThat(size).isEqualTo(entries.size());
+    }
+
+    @Test
+    void 만료시간_테스트() throws InterruptedException {
+        var valueOperations = redisTemplate.opsForValue();
+        final String key = "java";
+        valueOperations.set(key, "ggul jam");
+
+        // 만료시간 설정
+        var expire = redisTemplate.expire(key, 5, TimeUnit.SECONDS);
+
+        // 6초 대기
+        Thread.sleep(6000);
+
+        var actual = valueOperations.get(key);
+        assertThat(expire).isTrue();
+        assertThat(actual).isNull();
     }
 
 }
