@@ -1,6 +1,7 @@
 package com.leeheeefull.redis.log;
 
 import com.leeheeefull.redis.log.application.LogService;
+import com.leeheeefull.redis.log.domain.LogContent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,22 @@ public class LogServiceTest {
 
         // then
         assertThat(actual).isEqualTo(expected + "");
+    }
+
+    @Test
+    public void HashLogTest() {
+        // given
+        var hashKey = "1";
+        var expected = LogContent.builder()
+                .title("alphabet")
+                .content("abcdefghijklmnopqrstuvwxyz")
+                .build();
+
+        // when
+        logService.createHashLog(hashKey, expected);
+        var actual = logService.getHashLog(getNow(), hashKey);
+
+        assertThat(expected.getTitle()).isEqualTo(actual.getTitle());
     }
 
     private String getNow() {

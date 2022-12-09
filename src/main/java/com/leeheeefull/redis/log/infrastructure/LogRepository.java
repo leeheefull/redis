@@ -1,6 +1,8 @@
 package com.leeheeefull.redis.log.infrastructure;
 
+import com.leeheeefull.redis.log.domain.LogContent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +26,7 @@ public class LogRepository {
     }
 
     public void createStringValue(String keySuffix, int count) {
-        final String key = generateKey(getNow(), keySuffix);
+        String key = generateKey(getNow(), keySuffix);
 
         redisTemplate.opsForValue()
                 .increment(key, count);
@@ -37,6 +39,19 @@ public class LogRepository {
 
         return Objects.requireNonNull(objectValue)
                 .toString();
+    }
+
+    public void createHashValue(String keySuffix, String hashKey, LogContent hashValue) {
+        String key = generateKey(getNow(), keySuffix);
+        HashOperations<String, String, LogContent> hashOperations = redisTemplate.opsForHash();
+
+        setExpire(key);
+        hashOperations.put(key, hashKey, hashValue);
+    }
+
+    public LogContent getHashValue(String key, String hashKey) {
+        HashOperations<String, String, LogContent> hashOperations = redisTemplate.opsForHash();
+        return hashOperations.get(key, hashKey);
     }
 
     private void setExpire(String key) {
