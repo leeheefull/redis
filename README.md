@@ -1,6 +1,13 @@
 # Redis
 
-## Install redis
+## Goal
+
+1. [CrudRepository를 통한 객체 관리(Post 예제)](https://github.com/leeheefull/redis/tree/main/src/main/java/com/leeheeefull/redis/post)
+2. [RedisTemplate을 통한 객체 관리(Log 예제)](https://github.com/leeheefull/redis/tree/main/src/main/java/com/leeheeefull/redis/log)
+
+## Redis cli guide
+
+### Install redis
 
 > 레디스를 설치합니다.
 
@@ -8,7 +15,7 @@
 brew install redis
 ```
 
-## Start redis service
+### Start redis service
 
 > 레디스 서비스를 시작합니다.
 
@@ -16,7 +23,7 @@ brew install redis
 brew services start redis
 ```
 
-## Start redis CLI
+### Start redis CLI
 
 > 레디스를 CLI로 실행합니다.
 
@@ -24,7 +31,7 @@ brew services start redis
 redis-cli
 ```
 
-## Stop redis service
+### Stop redis service
 
 > 레디스 서비스를 멈춥니다.
 
@@ -32,7 +39,7 @@ redis-cli
 brew services stop redis
 ```
 
-## Restart redis service
+### Restart redis service
 
 > 레디스 서비스를 재시작합니다.
 
