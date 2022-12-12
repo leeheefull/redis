@@ -7,11 +7,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.Objects;
 
-import static com.leeheeefull.redis.util.RedisKeyConstants.DEFAULT_EXPIRE_DAYS;
-import static com.leeheeefull.redis.util.RedisKeyConstants.DEFAULT_KEY_PREFIX;
+import static com.leeheeefull.redis.util.RedisKeyUtils.DEFAULT_EXPIRE_DAYS;
+import static com.leeheeefull.redis.util.RedisKeyUtils.generateKey;
+import static com.leeheeefull.redis.util.TimeUtils.getNow;
 
 @RequiredArgsConstructor
 @Repository
@@ -34,8 +34,9 @@ public class LogRepository {
         setExpire(key);
     }
 
-    public String getStringValue(String key) {
-        Object objectValue = redisTemplate.opsForValue().get(key);
+    public String getStringValue(String time, String keySuffix) {
+        Object objectValue = redisTemplate.opsForValue()
+                .get(generateKey(time, keySuffix));
 
         return Objects.requireNonNull(objectValue)
                 .toString();
@@ -49,23 +50,13 @@ public class LogRepository {
         hashOperations.put(key, hashKey, hashValue);
     }
 
-    public LogContent getHashValue(String key, String hashKey) {
+    public LogContent getHashValue(String time, String keySuffix, String hashKey) {
         HashOperations<String, String, LogContent> hashOperations = redisTemplate.opsForHash();
-        return hashOperations.get(key, hashKey);
+        return hashOperations.get(generateKey(time, keySuffix), hashKey);
     }
 
     private void setExpire(String key) {
         redisTemplate.expire(key, Duration.ofDays(DEFAULT_EXPIRE_DAYS));
-    }
-
-    private String generateKey(String time, String keySuffix) {
-        return DEFAULT_KEY_PREFIX + time + keySuffix;
-    }
-
-    private String getNow() {
-        return LocalDate.now()
-                .toString()
-                .replace("-", "");
     }
 
 }

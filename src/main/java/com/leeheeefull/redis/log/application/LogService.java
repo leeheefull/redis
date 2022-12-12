@@ -5,7 +5,8 @@ import com.leeheeefull.redis.log.infrastructure.LogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.leeheeefull.redis.util.RedisKeyConstants.*;
+import static com.leeheeefull.redis.util.RedisKeyUtils.HASH_LOG_KEY_SUFFIX;
+import static com.leeheeefull.redis.util.RedisKeyUtils.STRING_LOG_KEY_SUFFIX;
 
 @RequiredArgsConstructor
 @Service
@@ -22,7 +23,7 @@ public class LogService {
     }
 
     public String getStringLog(String time) {
-        return logRepository.getStringValue(DEFAULT_KEY_PREFIX + time + STRING_LOG_KEY_SUFFIX);
+        return logRepository.getStringValue(time, STRING_LOG_KEY_SUFFIX);
     }
 
     public void createHashLog(String hashKey, LogContent hashValue) {
@@ -30,7 +31,7 @@ public class LogService {
     }
 
     public LogContent getHashLog(String time, String hashKey) {
-        return logRepository.getHashValue(DEFAULT_KEY_PREFIX + time + HASH_LOG_KEY_SUFFIX, hashKey);
+        return logRepository.getHashValue(time, HASH_LOG_KEY_SUFFIX, hashKey);
     }
 
 }
