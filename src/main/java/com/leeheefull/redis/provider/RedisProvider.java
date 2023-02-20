@@ -1,4 +1,4 @@
-package com.leeheeefull.redis.provider;
+package com.leeheefull.redis.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,8 @@ import java.util.Optional;
 @Component
 public class RedisProvider {
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ObjectMapper objectMapper;
     private final ReactiveRedisTemplate<String, Object> reactiveRedisTemplate;
+    private final ObjectMapper objectMapper;
 
     public void save(String key, Object value) {
         redisTemplate.opsForValue()
